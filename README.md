@@ -1,6 +1,6 @@
 # zhangsean/cloud189
 
-基于 alpine 的容器化 [`tickstep/cloudpan189-go`](https://github.com/tickstep/cloudpan189-go).
+基于 [`tickstep/cloudpan189-go`](https://github.com/tickstep/cloudpan189-go) 的天翼云盘命令行客户端容器镜像.
 
 [![DockerHub Badge](http://dockeri.co/image/zhangsean/cloud189)](https://hub.docker.com/r/zhangsean/cloud189/)
 

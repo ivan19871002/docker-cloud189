@@ -1,47 +1,61 @@
-# zhangsean/kubectl
+# zhangsean/cloud189
 
-Containerized `kubectl` with `envsubst`、`curl`、`jq` based on alpine.
+基于 alpine 的容器化 [`tickstep/cloudpan189-go`](https://github.com/tickstep/cloudpan189-go).
 
-## Environment variables
+[![DockerHub Badge](http://dockeri.co/image/zhangsean/cloud189)](https://hub.docker.com/r/zhangsean/cloud189/)
 
-Env name | Required | Description
+## 环境变量
+
+环境变量 | 默认值 | 描述
 ---|---|---
-K8S_URL | √ | Kubernetes API url
-K8S_CA | | Kubernetes CA certificate string encoded by base64
-K8S_TOKEN | Only for token authorization | Kubernetes user token
-K8S_CER | Only for certificate authorization | Kubernetes user certificate string encoded by base64
-K8S_KEY | Only for certificate authorization | Kubernetes user certificate key string encoded by base64
+CLOUD189_USERNAME | | 用户名
+CLOUD189_PASSWORD | | 密码
+CLOUD189_VERBOSE | 0 | 是否输出接口调试日志
+CLOUD189_SAVEDIR | /root/Downloads | 下载文件保存路径
+CLOUD189_CACHE_SIZE| 256KB | 下载缓存
+CLOUD189_PROXY | | 设置代理, 支持 http/socks5 代理，例如：http://127.0.0.1:8888
 
-## Usage
+## 用法
+
+本镜像已经将命令行 `cloudpan189-go` 软连接为 `cloud189`，两个命令等价，均可以使用。
 
 ```sh
-# K8s authorize by token
+# 环境变量自动登录，自动开始下载任务，下载完成后容器自动删除
 docker run -it --rm \
-    -e K8S_URL=https://10.18.59.21:6443 \
-    -e K8S_TOKEN=kubeconfig-user-drnf9.c-h94qp:jxxpjgxf2f6pgxd...8xj9fh47bjs \
-    zhangsean/kubectl \
+    -e CLOUD189_USERNAME=189xxxxxxxx \
+    -e CLOUD189_PASSWORD=xxxxxxxx \
+    -e CLOUD189_SAVEDIR=/downloads \
+    -v ~/Downloads:/downloads \
+    zhangsean/cloud189 \
+    d "游戏/xxxx"
+# 友情提示：下载路径最好用双引号，避免因为文件或目录名有空格导致下载失败
+
+# 环境变量自动登录，并进入交互模式
+docker run -it \
+    --name cloud189 \
+    -e CLOUD189_USERNAME=189xxxxxxxx \
+    -e CLOUD189_PASSWORD=xxxxxxxx \
+    zhangsean/cloud189
+
+# 纯手动命令行模式启动
+docker run -it \
+    --name cloud189 \
+    zhangsean/cloud189 \
     sh
 
-# K8s authorize by certificate
-docker run -it --rm \
-    -e K8S_URL=https://10.18.59.21:6443 \
-    -e K8S_CER=LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSU...RFLS0tLS0K \
-    -e K8S_KEY=LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQ...ktLS0tLQo= \
-    zhangsean/kubectl \
-    sh
+# 再次进入容器命令行
+docker exec -it cloud189 sh
 
-# K8s authorize by certificate with ca
-docker run -it --rm \
-    -e K8S_URL=https://10.18.59.21:6443 \
-    -e K8S_CA=LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUR...RS0tLS0tCg== \
-    -e K8S_CER=LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSU...RFLS0tLS0K \
-    -e K8S_KEY=LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQ...ktLS0tLQo= \
-    zhangsean/kubectl \
-    sh
+# 进入cloudpan189-go交互模式
+cloud189
+# 手动交互登录
+>login
+# 列举网盘文件
+>ls
+# 进入指定目录
+>cd 游戏
+# 其他命令请查看cloudpan189-go说明
 
-# config k8s cluster
-kubeconfig
-
-# kubectl has been authenticated
-kubectl get po -A
+# 使用完成后删除容器
+docker rm -f cloud189
 ```

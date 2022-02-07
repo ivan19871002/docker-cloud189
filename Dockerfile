@@ -1,10 +1,17 @@
 FROM alpine
-LABEL MAINTAINER="SeanZhang <zxf2342@qq.com>"
+LABEL MAINTAINER="ZhangSean <zxf2342@qq.com>"
 
-COPY kubeconfig /usr/local/bin/
+COPY entrypoint.sh /bin/entrypoint.sh
 
-ENV K8S_RELEASE=v1.23.3
+ENV CLOUD189_CACHE_SIZE=256KB
+ENV CLOUD189_VER=v0.1.1
 
-RUN apk --no-cache add jq gettext curl; \
-    curl -LSo /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${K8S_RELEASE}/bin/linux/amd64/kubectl; \
-    chmod +x /usr/local/bin/kubectl
+RUN wget -O cloudpan189.zip https://github.com/tickstep/cloudpan189-go/releases/download/${CLOUD189_VER}/cloudpan189-go-${CLOUD189_VER}-linux-amd64.zip && \
+    unzip cloudpan189.zip && \
+    mv cloudpan189-go-*-linux-amd64/cloudpan189-go /bin/ && \
+    rm -rf cloudpan189* && \
+    ln -s /bin/cloudpan189-go /bin/cloud189
+
+VOLUME [ "/root/Downloads" ]
+
+ENTRYPOINT [ "/bin/entrypoint.sh" ]

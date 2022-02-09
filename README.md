@@ -30,6 +30,17 @@ docker run -it --rm \
     d "游戏/xxxx"
 # 友情提示：下载路径最好用双引号，避免因为文件或目录名有空格导致下载失败
 
+# 一键自动签到
+docker run -itd \
+    --name cloud189-sign \
+    -e CLOUD189_USERNAME=189xxxxxxxx \
+    -e CLOUD189_PASSWORD=xxxxxxxx \
+    zhangsean/cloud189 \
+    sign
+# 在任何系统设置定时任务，每天重启这个容器即可每天自动签到，以群辉为例
+#minute	hour	mday	month	wday	who	command
+0	0	*	*	*	root	docker restart cloud189-sign
+
 # 环境变量自动登录，并进入交互模式
 docker run -it \
     --name cloud189 \

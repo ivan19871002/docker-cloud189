@@ -9,7 +9,7 @@ ENV CLOUD189_USERNAME= \
     CLOUD189_PROXY= \
     CLOUD189_SAVEDIR=/root/Downloads \
     CLOUD189_VERBOSE=0 \
-    CLOUD189_VER=v0.1.1
+    CLOUD189_VER=v0.1.2
 
 RUN wget -O cloudpan189.zip https://github.com/tickstep/cloudpan189-go/releases/download/${CLOUD189_VER}/cloudpan189-go-${CLOUD189_VER}-linux-amd64.zip && \
     unzip cloudpan189.zip && \
